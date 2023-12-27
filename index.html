@@ -37,6 +37,8 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
+        L.control.scale({imperial: false}).addTo(map);
+
         if ('points' in params) {
             var points = params['points'].split(';').filter(function(point) {
                 return point.split(',').length >= 2;
