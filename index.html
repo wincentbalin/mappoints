@@ -22,11 +22,53 @@
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
+        var params = {};
+
+        if (location.search) {
+            location.search.substring(1).split('&').forEach(function(param) {
+                var kv = param.split('=');
+                params[kv[0]] = kv[1];
+            });
+        }
+
         var map = L.map('map').setView([51.505, -0.09], 13);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
+
+        if ('points' in params) {
+            var points = params['points'].split(';').filter(function(point) {
+                return point.split(',').length >= 2;
+            }).map(function(point) {
+                var data = point.split(','),
+                    lat = parseFloat(data[0]),
+                    lon = parseFloat(data[1]),
+                    desc = data.length > 2 ? data[2] : null;
+
+                if (isNaN(lat) || isNaN(lon)) {
+                    alert('Malformed parameter value: ' + data);
+                }
+
+                return {
+                    'lat': lat,
+                    'lon': lon,
+                    'desc': desc
+                };
+            });
+
+            var pointsBbox = points.map(function(point) {
+                return [point.lat, point.lon];
+            });
+
+            points.forEach(function(p) {
+                if (p.desc) {
+                    L.marker([p.lat, p.lon]).addTo(map).bindPopup(p.desc).openPopup();
+                } else {
+                    L.marker([p.lat, p.lon]).addTo(map);
+                }
+            });
+        }
     </script>
 </body>
 </html>
