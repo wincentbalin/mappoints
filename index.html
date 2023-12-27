@@ -59,10 +59,6 @@
                 };
             });
 
-            var pointsBbox = points.map(function(point) {
-                return [point.lat, point.lon];
-            });
-
             points.forEach(function(p) {
                 if (p.desc) {
                     L.marker([p.lat, p.lon]).addTo(map).bindPopup(p.desc).openPopup();
@@ -70,6 +66,11 @@
                     L.marker([p.lat, p.lon]).addTo(map);
                 }
             });
+
+            var bounds = L.latLngBounds(points.map(function(point) {
+                return [point.lat, point.lon];
+            }));
+            map.fitBounds(bounds);
         }
     </script>
 </body>
