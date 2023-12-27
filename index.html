@@ -27,7 +27,7 @@
         if (location.search) {
             location.search.substring(1).split('&').forEach(function(param) {
                 var kv = param.split('=');
-                params[kv[0]] = kv[1];
+                params[kv[0]] = decodeURIComponent(kv[1]);
             });
         }
 
