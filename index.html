@@ -61,7 +61,7 @@
 
             points.forEach(function(p) {
                 if (p.desc) {
-                    L.marker([p.lat, p.lon]).addTo(map).bindPopup(p.desc).openPopup();
+                    L.marker([p.lat, p.lon]).addTo(map).bindPopup(p.desc, {autoClose: false}).openPopup();
                 } else {
                     L.marker([p.lat, p.lon]).addTo(map);
                 }
